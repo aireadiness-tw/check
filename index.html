@@ -126,6 +126,48 @@ footer a{color:var(--deep-ink)}
 footer ul{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:8px 24px}
 @media (prefers-reduced-motion:reduce){.fill{transition:none}}
 
+
+/* ===== 流動寬度：與首頁同一套規則。內容約 92vw、2080px 封頂；
+   1440px 以下字級與間距維持原樣，1440→2560px 線性放大。 ===== */
+.wrap{width:min(100% - 2 * max(16px,4vw,env(safe-area-inset-left,0px),env(safe-area-inset-right,0px)),2080px);max-width:none;margin-inline:auto;padding-left:0;padding-right:0}
+@media (max-width:900px){.side{margin-inline:calc(-1 * max(16px,4vw,env(safe-area-inset-left,0px),env(safe-area-inset-right,0px)));padding-inline:max(16px,4vw,env(safe-area-inset-left,0px),env(safe-area-inset-right,0px))}}
+@media (min-width:1441px){
+  :root{--d:calc((100vw - 1440px) / 1120);--nav:clamp(68px,calc(68px + 12 * var(--d)),80px)}
+  body{font-size:clamp(17px,calc(17px + 3 * var(--d)),20px)}
+  .brand{font-size:clamp(19px,calc(19px + 4 * var(--d)),23px)}
+  .btn{padding:clamp(10px,calc(10px + 4 * var(--d)),14px) clamp(20px,calc(20px + 8 * var(--d)),28px)}
+  .topbar .btn{font-size:clamp(15px,calc(15px + 2 * var(--d)),17px);padding:10px 22px}
+  .intro-band{padding-top:calc(var(--nav) + clamp(28px,calc(28px + 24 * var(--d)),52px));padding-bottom:clamp(48px,calc(48px + 32 * var(--d)),80px)}
+  .intro-band .wrap{gap:clamp(56px,calc(56px + 64 * var(--d)),120px)}
+  .back,.eyebrow{font-size:clamp(15px,calc(15px + 2 * var(--d)),17px)}
+  h1{font-size:clamp(48px,calc(48px + 32 * var(--d)),80px)}
+  .sub{font-size:clamp(18px,calc(18px + 4 * var(--d)),22px)}
+  .sheet-art{max-width:clamp(400px,calc(400px + 160 * var(--d)),560px)}
+  .layout{grid-template-columns:clamp(280px,calc(280px + 80 * var(--d)),360px) minmax(0,1fr);gap:clamp(56px,calc(56px + 40 * var(--d)),96px);padding-block:clamp(48px,calc(48px + 24 * var(--d)),72px) clamp(80px,calc(80px + 40 * var(--d)),120px)}
+  .side{padding:clamp(22px,calc(22px + 8 * var(--d)),30px)}
+  .count{font-size:clamp(14px,calc(14px + 2 * var(--d)),16px)}
+  #dimnav a{font-size:clamp(15px,calc(15px + 3 * var(--d)),18px);grid-template-columns:28px 1fr auto;padding:8px 10px}
+  #dimnav .code,#dimnav .dc{font-size:clamp(13px,calc(13px + 2 * var(--d)),15px)}
+  .dim-head .code{width:clamp(36px,calc(36px + 8 * var(--d)),44px);height:clamp(36px,calc(36px + 8 * var(--d)),44px);font-size:clamp(16px,calc(16px + 3 * var(--d)),19px)}
+  .dim-head h2{font-size:clamp(24px,calc(24px + 8 * var(--d)),32px)}
+  .dim-desc{font-size:clamp(15px,calc(15px + 3 * var(--d)),18px)}
+  .q{padding-block:clamp(22px,calc(22px + 8 * var(--d)),30px)}
+  .q p{font-size:clamp(17px,calc(17px + 3 * var(--d)),20px)}
+  .q .qn{font-size:clamp(14px,calc(14px + 2 * var(--d)),16px)}
+  .opts{gap:clamp(10px,calc(10px + 4 * var(--d)),14px)}
+  .opt{font-size:clamp(15px,calc(15px + 3 * var(--d)),18px);padding:clamp(12px,calc(12px + 4 * var(--d)),16px) clamp(14px,calc(14px + 4 * var(--d)),18px)}
+  #result{padding:clamp(32px,calc(32px + 16 * var(--d)),48px) max(20px,3vw)}
+  .score .num{font-size:clamp(64px,calc(64px + 24 * var(--d)),88px)}
+  .band{font-size:clamp(26px,calc(26px + 8 * var(--d)),34px)}
+  .row{grid-template-columns:10em 1fr 5em}
+  .row .val{font-size:clamp(14px,calc(14px + 2 * var(--d)),16px)}
+  .fb,.cta{font-size:clamp(15px,calc(15px + 3 * var(--d)),18px)}
+  h3{font-size:clamp(19px,calc(19px + 4 * var(--d)),23px)}
+  .note{font-size:clamp(14px,calc(14px + 2 * var(--d)),16px)}
+  footer{font-size:clamp(15px,calc(15px + 2 * var(--d)),17px);padding-block:clamp(36px,calc(36px + 16 * var(--d)),52px)}
+}
+/* 題目欄夠寬時，四個選項排成一列 */
+@media (min-width:1800px){.opts{grid-template-columns:repeat(4,minmax(0,1fr))}}
 </style>
 </head>
 <body>
