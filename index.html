@@ -150,9 +150,10 @@ function show(){
   head.querySelector('.summary').textContent = band.summary;
   r.append(head);
   const rows = document.createElement('div'); rows.className = 'rows';
+  const dimScores = [];
   DATA.dimensions.forEach(d => {
     const qs = DATA.questions.filter(q => q.dimension === d.id);
-    const s = qs.reduce((x,q)=>x+(a[q.id]||0),0), m = qs.length*3, lv = level(s/qs.length);
+    const s = qs.reduce((x,q)=>x+(a[q.id]||0),0), m = qs.length*3, lv = level(s/qs.length); dimScores.push(`${d.name} ${Math.round(s/m*100)}`);
     const row = document.createElement('div'); row.className = 'row';
     row.innerHTML = `<span class="name"></span><div class="meter"><i style="width:${s/m*100}%;background:${lvColor[lv]}"></i></div><span class="val">${Math.round(s/m*100)} 分</span><p class="fb"></p>`;
     row.querySelector('.name').textContent = d.name;
@@ -166,8 +167,8 @@ function show(){
   const ol = document.createElement('ol'); ol.className = 'steps';
   band.next_steps.forEach(s => { const li = document.createElement('li'); li.textContent = s; ol.append(li); });
   r.append(ol);
-  const cta = document.createElement('div'); cta.className = 'cta'; cta.textContent = DATA.cta + ' '; const link = document.createElement('a'); link.href = 'https://docs.google.com/forms/d/e/1FAIpQLSeiIEt4LeP-rIitegCDqyVF-HGJbCDBkQgci7QhBOAWPyaF8w/viewform'; link.target = '_blank'; link.rel = 'noopener'; link.textContent = '預約免費診斷'; link.style.fontWeight = '700'; cta.append(link); r.append(cta);
-  const note = document.createElement('p'); note.className = 'note'; note.textContent = '自評答案只存在你自己的瀏覽器裡，不會傳送給任何人；只有你在預約表單主動填寫的聯絡資料會送給我們。'; r.append(note);
+  const cta = document.createElement('div'); cta.className = 'cta'; cta.textContent = DATA.cta + ' '; const link = document.createElement('a'); link.href = 'https://docs.google.com/forms/d/e/1FAIpQLSeiIEt4LeP-rIitegCDqyVF-HGJbCDBkQgci7QhBOAWPyaF8w/viewform?' + new URLSearchParams({usp: 'pp_url', 'entry.658515327': String(pct), 'entry.1095725114': dimScores.join('、')}); link.target = '_blank'; link.rel = 'noopener'; link.textContent = '預約免費診斷'; link.style.fontWeight = '700'; cta.append(link); r.append(cta);
+  const note = document.createElement('p'); note.className = 'note'; note.textContent = '自評答案只存在你自己的瀏覽器裡，不會自動傳送給任何人。點「預約免費診斷」時，分數會先帶進表單；只有你在表單按下送出，聯絡資料和分數才會送給我們。'; r.append(note);
   r.hidden = false; r.scrollIntoView({behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'});
 }
 form.addEventListener('change', () => { update(); save(); });
