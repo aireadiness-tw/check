@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="10 分鐘自評：看看你的公司導入 AI 前準備到哪裡。">
+<meta name="robots" content="index,follow">
+<title>AI 準備度自評</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+/* 版面：像一張工廠點檢表，左邊面向、右邊勾選，結果像檢驗報告 */
+:root{
+  --bg:#f3f5f6; --paper:#ffffff; --ink:#1c2328; --muted:#5d6b74; --line:#d5dde2;
+  --accent:#1f6f8b; --accent-soft:#e1eef3; --warn:#b45d0a; --ok:#2f7d4f; --low:#b3402e;
+  --sans:"Noto Sans TC",system-ui,-apple-system,"PingFang TC",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,"SFMono-Regular",monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#12171a; --paper:#1a2125; --ink:#e4eaed; --muted:#9aa8b0; --line:#2d373d;
+  --accent:#5fb2cf; --accent-soft:#1c3440; --warn:#e3964a; --ok:#6cc08f; --low:#e47a66; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#12171a; --paper:#1a2125; --ink:#e4eaed; --muted:#9aa8b0; --line:#2d373d;
+  --accent:#5fb2cf; --accent-soft:#1c3440; --warn:#e3964a; --ok:#6cc08f; --low:#e47a66; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.65;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 48px}
+.wrap{max-width:760px;margin:0 auto}
+header.top{padding-block:40px 20px}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.12em;color:var(--accent);text-transform:uppercase}
+h1{font-size:clamp(26px,5vw,34px);line-height:1.25;margin:8px 0 12px;text-wrap:balance}
+.intro{color:var(--muted);max-width:62ch;margin:0}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);padding-block:12px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+.track{flex:1;height:6px;background:var(--line);border-radius:3px;overflow:hidden}
+.fill{height:100%;width:0;background:var(--accent);transition:width .25s}
+.count{font-family:var(--mono);font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+.btn{font:inherit;font-weight:500;border:1px solid var(--accent);background:var(--accent);color:var(--paper);padding:8px 16px;border-radius:6px;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--accent)}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.btn:focus-visible,.opt input:focus-visible+span{outline:2px solid var(--accent);outline-offset:2px}
+section.dim{margin-top:32px}
+.dim-head{display:flex;align-items:baseline;gap:10px;border-bottom:2px solid var(--ink);padding-bottom:6px}
+.dim-head .code{font-family:var(--mono);font-size:13px;color:var(--accent)}
+.dim-head h2{font-size:20px;margin:0}
+.dim-desc{color:var(--muted);font-size:14px;margin:6px 0 0}
+.q{padding-block:18px;border-bottom:1px solid var(--line)}
+.q p{margin:0 0 10px;font-weight:500}
+.q .qn{font-family:var(--mono);font-size:13px;color:var(--muted);margin-right:6px}
+.opts{display:grid;gap:6px}
+.opt{display:flex;gap:10px;align-items:flex-start;cursor:pointer;padding:8px 10px;border-radius:6px;border:1px solid transparent}
+.opt:hover{background:var(--accent-soft)}
+.opt input{margin-top:6px;accent-color:var(--accent)}
+.opt:has(input:checked){background:var(--accent-soft);border-color:var(--accent)}
+.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:28px}
+#result{margin-top:40px;background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:24px max(20px,4vw)}
+.score{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 16px}
+.score .num{font-family:var(--mono);font-size:44px;font-weight:600;font-variant-numeric:tabular-nums;color:var(--accent)}
+.score .of{font-family:var(--mono);color:var(--muted)}
+.band{font-size:22px;margin:4px 0 8px}
+.rows{display:grid;gap:14px;margin:24px 0}
+.row{display:grid;grid-template-columns:7.5em 1fr 4.5em;gap:10px;align-items:center}
+.row .name{font-weight:500}
+.row .val{font-family:var(--mono);font-size:13px;text-align:right;font-variant-numeric:tabular-nums;color:var(--muted)}
+.meter{height:10px;background:var(--line);border-radius:5px;overflow:hidden}
+.meter i{display:block;height:100%}
+.fb{grid-column:1/-1;font-size:14px;color:var(--muted);margin:-4px 0 0;min-width:0}
+.tag{display:inline-block;font-size:12px;font-family:var(--mono);padding:1px 8px;border-radius:10px;border:1px solid currentColor;margin-left:6px}
+h3{font-size:17px;margin:24px 0 8px}
+ol.steps{margin:0;padding-left:1.4em;display:grid;gap:6px}
+.cta{margin-top:24px;padding:16px;border-radius:8px;background:var(--accent-soft)}
+.cta a{color:var(--accent);text-underline-offset:3px}
+.note{font-size:13px;color:var(--muted);margin-top:16px}
+@media (max-width:480px){.row{grid-template-columns:6em 1fr 3.8em}}
+@media (prefers-reduced-motion:reduce){.fill{transition:none}}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="top">
+    <div class="eyebrow">AI Readiness · 製造業 20–150 人</div>
+    <h1 id="title"></h1>
+    <p class="intro" id="intro"></p>
+  </header>
+  <div class="bar">
+    <div class="track"><div class="fill" id="fill"></div></div>
+    <span class="count" id="count">0 / 21</span>
+    <button class="btn" id="see" type="button" disabled>看結果</button>
+  </div>
+  <form id="quiz"></form>
+  <div class="actions">
+    <button class="btn" id="see2" type="button" disabled>看結果</button>
+    <button class="btn ghost" id="sample" type="button">填入範例答案</button>
+    <button class="btn ghost" id="reset" type="button">全部清除</button>
+  </div>
+  <div id="result" hidden></div>
+</div>
+
+<script>
+const DATA = {"title": "中小企業 AI 準備度自評（製造業版）", "intro": "這份自評約 15 分鐘，共 21 題，適合 20 到 150 人的製造業老闆或主管填寫。題目分成 6 個面向，每題選最接近貴公司現況的一項就好，沒有標準答案，也不用先準備資料。填完會看到總分、所在等級，以及每個面向的簡單建議，可以作為公司下一步要從哪裡開始的參考。", "dimensions": [{"id": "leadership", "name": "老闆投入", "description": "老闆或接班人是否願意親自帶頭、撥出時間與人力，並清楚想用 AI 解決什麼問題。"}, {"id": "process_data", "name": "流程與資料", "description": "從接單到出貨的文書工作是否有固定做法，資料是否已經在電腦裡、找得到。"}, {"id": "people", "name": "人員與技能", "description": "員工使用電腦的基本能力、學新東西的意願，以及有沒有適合帶頭的內部人選。"}, {"id": "it_basics", "name": "IT 基礎", "description": "電腦設備、網路、公司帳號與備份等基本環境是否穩定，出問題時有沒有人可以處理。"}, {"id": "security_governance", "name": "資安與規則", "description": "誰能看哪些資料是否有分清楚，以及公司有沒有基本的 AI 使用規則。"}, {"id": "current_use", "name": "目前使用情況", "description": "公司裡現在有多少人在用 AI、用在哪些地方，以及有沒有做出實際成果。"}], "questions": [{"id": "q01", "dimension": "leadership", "text": "老闆（或接班人）對公司導入 AI 的態度最接近哪一種？", "options": [{"label": "還沒想過，或覺得跟我們這行沒關係", "score": 0}, {"label": "有興趣，但目前沒有時間處理", "score": 1}, {"label": "想做，已經在找方法或上過相關課程", "score": 2}, {"label": "已經決定要做，而且願意親自參與", "score": 3}]}, {"id": "q02", "dimension": "leadership", "text": "如果要用 AI 改善工作，你心中有沒有最想先解決的一件事？", "options": [{"label": "沒有特別想法", "score": 0}, {"label": "有模糊的方向，例如「想省人力」", "score": 1}, {"label": "能說出一兩個具體的工作，例如報價太慢、出貨文件常出錯", "score": 2}, {"label": "能說出具體工作，也大概知道現在要花多少人、多少時間", "score": 3}]}, {"id": "q03", "dimension": "leadership", "text": "接下來三個月，老闆每個月能撥出多少時間參與這件事（開會、看成果、做決定）？", "options": [{"label": "幾乎沒有時間", "score": 0}, {"label": "每月不到 1 小時", "score": 1}, {"label": "每月約 1 到 2 小時", "score": 2}, {"label": "每月 2 小時以上，必要時可以參加啟動會", "score": 3}]}, {"id": "q04", "dimension": "leadership", "text": "願不願意讓 1 到 2 位員工，每週固定撥出約 4 小時上班時間學習並推動 AI？", "options": [{"label": "不行，大家都太忙了", "score": 0}, {"label": "可以，但只能利用空檔，時間不固定", "score": 1}, {"label": "可以，但需要先調整他們手上的工作", "score": 2}, {"label": "可以，而且已經想到適合的人選", "score": 3}]}, {"id": "q05", "dimension": "process_data", "text": "報價、訂單、出貨單、品保文件這些工作，目前是怎麼做的？", "options": [{"label": "大多手寫或靠紙本傳遞", "score": 0}, {"label": "用 Excel 或 Word，但每個人做法不一樣", "score": 1}, {"label": "有固定的表格或範本，大家照著做", "score": 2}, {"label": "大部分在 ERP 或公司系統裡完成，格式一致", "score": 3}]}, {"id": "q06", "dimension": "process_data", "text": "如果有新人接手報價或出貨文件的工作，公司有沒有寫下來的做法可以照著學？", "options": [{"label": "沒有，全靠老員工口頭教", "score": 0}, {"label": "有一些零散的筆記", "score": 1}, {"label": "主要工作有步驟說明或範例檔", "score": 2}, {"label": "有完整的作業說明，而且有人定期更新", "score": 3}]}, {"id": "q07", "dimension": "process_data", "text": "要找去年某張訂單的報價、圖面或出貨紀錄，通常要花多久？", "options": [{"label": "要翻紙本或問人，常常找不到", "score": 0}, {"label": "在某人的電腦裡，要問對人才找得到", "score": 1}, {"label": "在公司共用資料夾裡，花點時間找得到", "score": 2}, {"label": "在系統或共用資料夾裡，幾分鐘內就找得到", "score": 3}]}, {"id": "q08", "dimension": "process_data", "text": "公司知不知道哪幾項文書工作最花人力或最常出錯？", "options": [{"label": "不清楚", "score": 0}, {"label": "大家心裡有數，但沒有討論過", "score": 1}, {"label": "能列出幾項，但沒有算過花多少時間", "score": 2}, {"label": "能列出幾項，也大概算過每週花多少工時或出錯幾次", "score": 3}]}, {"id": "q09", "dimension": "people", "text": "內勤人員（行政、業務助理、採購、品保文書等）使用電腦的能力大致如何？", "options": [{"label": "多數只會基本操作，常需要別人幫忙", "score": 0}, {"label": "會用 Email 和簡單的 Excel、Word", "score": 1}, {"label": "多數能熟練使用 Excel、雲端文件或公司系統", "score": 2}, {"label": "有人會自己做 Excel 公式、巨集或小工具", "score": 3}]}, {"id": "q10", "dimension": "people", "text": "員工面對新的工作方法或新工具時，通常是什麼反應？", "options": [{"label": "多半抗拒，擔心增加工作或被取代", "score": 0}, {"label": "要主管一直要求才會用", "score": 1}, {"label": "有人帶就願意試", "score": 2}, {"label": "有人會主動找新方法，還會教同事", "score": 3}]}, {"id": "q11", "dimension": "people", "text": "公司裡有沒有一位熟悉業務流程、同事信任、也願意學新東西的人，可以帶頭推動 AI？", "options": [{"label": "想不到這樣的人", "score": 0}, {"label": "也許有，但他手上工作太滿", "score": 1}, {"label": "有，但還沒問過他的意願", "score": 2}, {"label": "有，而且他已經表達過興趣", "score": 3}]}, {"id": "q12", "dimension": "people", "text": "近一年來，公司有沒有讓員工參加過 AI 或數位工具的課程？", "options": [{"label": "沒有", "score": 0}, {"label": "只有老闆或一兩位主管去聽過", "score": 1}, {"label": "有幾位員工上過，但回來後沒有持續使用", "score": 2}, {"label": "有員工上過，而且回來後實際用在工作上", "score": 3}]}, {"id": "q13", "dimension": "it_basics", "text": "內勤人員的電腦設備大致如何？", "options": [{"label": "很多人共用電腦，或電腦很舊、常當機", "score": 0}, {"label": "每人有電腦，但不少已經老舊、速度慢", "score": 1}, {"label": "每人有電腦，大多可以正常使用", "score": 2}, {"label": "每人有電腦，有定期汰換，網路穩定", "score": 3}]}, {"id": "q14", "dimension": "it_basics", "text": "公司的 Email 和文件是用什麼方式管理？", "options": [{"label": "各自用個人信箱，檔案存在自己電腦或隨身碟", "score": 0}, {"label": "有公司信箱，但檔案多半存在自己電腦", "score": 1}, {"label": "有公司信箱，也有公司共用資料夾或 NAS", "score": 2}, {"label": "有公司統一的雲端辦公帳號（例如 Google 或 Microsoft），檔案集中管理", "score": 3}]}, {"id": "q15", "dimension": "it_basics", "text": "電腦、網路或系統出問題時，誰來處理？重要資料有沒有備份？", "options": [{"label": "沒有固定的人，也不確定有沒有備份", "score": 0}, {"label": "找懂電腦的員工幫忙，備份靠個人習慣", "score": 1}, {"label": "有配合的電腦公司或系統商，重要資料有備份", "score": 2}, {"label": "有固定的維護窗口，備份會自動執行，而且試過能還原", "score": 3}]}, {"id": "q16", "dimension": "security_governance", "text": "員工可以看到哪些檔案，是怎麼決定的？", "options": [{"label": "大家都能看所有檔案，沒有區分", "score": 0}, {"label": "重要檔案靠個人自己保管", "score": 1}, {"label": "有依部門區分資料夾權限", "score": 2}, {"label": "有依部門區分權限，人員到職、離職時會調整", "score": 3}]}, {"id": "q17", "dimension": "security_governance", "text": "公司對「哪些資料可以貼到 AI 工具裡」有沒有規定？例如客戶圖面、報價、個人資料。", "options": [{"label": "沒有規定，也沒想過這個問題", "score": 0}, {"label": "口頭提醒過，但沒有明確的範圍", "score": 1}, {"label": "有寫下簡單的規則", "score": 2}, {"label": "有書面規則，員工知道，而且有人負責確認", "score": 3}]}, {"id": "q18", "dimension": "security_governance", "text": "客戶有沒有要求貴公司遵守保密或資安規定？公司目前做得如何？", "options": [{"label": "不清楚有沒有這類要求", "score": 0}, {"label": "有簽保密協議，但內部沒有對應做法", "score": 1}, {"label": "有要求，內部有基本做法，例如密碼、權限、備份", "score": 2}, {"label": "有要求，內部有書面做法，也曾經通過客戶稽核", "score": 3}]}, {"id": "q19", "dimension": "current_use", "text": "公司裡目前有多少人在工作上用過 AI 工具（例如 ChatGPT、Gemini、Copilot、Claude）？", "options": [{"label": "沒有人，或不清楚", "score": 0}, {"label": "只有一兩個人偶爾用", "score": 1}, {"label": "有幾個人每週都會用", "score": 2}, {"label": "大部分內勤人員每週都會用", "score": 3}]}, {"id": "q20", "dimension": "current_use", "text": "目前用 AI 主要做什麼？", "options": [{"label": "還沒用在工作上", "score": 0}, {"label": "查資料、問問題、翻譯", "score": 1}, {"label": "幫忙寫 Email、整理報表或文件", "score": 2}, {"label": "已經固定用在某個流程，例如報價、訂單整理或出貨文件", "score": 3}]}, {"id": "q21", "dimension": "current_use", "text": "公司有沒有員工自己用 AI 做出小工具或固定的做法，而且同事也在用？", "options": [{"label": "沒有", "score": 0}, {"label": "有人試過，但沒有繼續用", "score": 1}, {"label": "有一兩個，主要是做的人自己在用", "score": 2}, {"label": "有，而且已經有同事一起使用，省下明顯的時間", "score": 3}]}], "bands": [{"min": 0, "max": 20, "name": "起步期：先把地基打好", "summary": "公司目前導入 AI 的條件還不足，硬上工具很可能變成「買了沒人用」。好消息是，地基打好以後，後面會快很多。", "next_steps": ["老闆先挑一件「最花人力的文書工作」，花一週請同事記下每天大約花多少時間。", "把報價、訂單、出貨相關的檔案集中到公司共用資料夾，先停止「只存在某人電腦裡」的做法。", "請配合的電腦公司確認重要資料有沒有備份，並試著還原一次。", "訂一條簡單規則：客戶圖面、報價與個人資料，先不要貼到免費的 AI 工具。", "三個月後再填一次自評，看分數有沒有往上。"]}, {"min": 21, "max": 35, "name": "準備期：有心，但缺方法和帶頭的人", "summary": "公司已經有一些基礎，也可能有人開始用 AI，但多半是零散的個人使用，還沒變成公司的工作方式。", "next_steps": ["選出 1 到 2 位可以帶頭的員工，請老闆確認他們每週有約 4 小時的上班時間可以投入。", "從接單到出貨的流程中挑 1 個目標，例如報價或出貨文件，先記下現在要花多少時間。", "統一公司帳號：Email 與檔案改用公司統一的雲端辦公帳號，並開啟兩步驟登入。", "寫一頁「AI 使用規則」：哪些資料可以用、哪些不行、有疑問找誰。", "預約一次免費 30 分鐘遠端診斷，確認從哪個流程開始最划算。"]}, {"min": 36, "max": 49, "name": "啟動期：條件已到位，適合開始全員動起來", "summary": "老闆有意願、資料大多已經數位化、也有可以帶頭的人。現在缺的是一次有系統的啟動，讓更多員工把 AI 用在自己的工作上。", "next_steps": ["鎖定 2 到 3 個目標流程，量好基準線（工時、處理天數、出錯次數）。", "安排一次全員工作坊，目標是每位內勤人員都做出一個自己工作用得到的小工具。", "讓帶頭的員工每週固定開一次短會，收集大家的問題與成果。", "盤點資料：哪些可以用雲端 AI，哪些必須留在公司內部，需要時再請系統商評估設備。", "每個月用同一把尺看成效：多少人在用、省了多少時間、有沒有資安問題。"]}, {"min": 50, "max": 63, "name": "擴大期：已經有成果，接下來是擴大和管好", "summary": "公司已經有人把 AI 用在實際流程上，也有基本規則。下一步是把成功做法推廣到更多部門，同時把權限、資安和成效追蹤管好。", "next_steps": ["把已經有效的小工具整理成標準做法，推廣到其他部門或同類工作。", "建立每月成效報告，追蹤使用人數、節省工時與出錯率。", "讓帶頭的員工能獨立處理常見問題與新人訓練，降低對外部人員的依賴。", "定期檢查權限與備份，並確認符合客戶的保密與資安要求。", "每季檢視一次新的 AI 功能，判斷有沒有值得換或新增的工具。"]}], "dimension_feedback": {"leadership": {"low": "AI 導入最常失敗的原因，是老闆沒有親自帶頭。建議先想清楚最想解決哪一件事，並保留每月至少 1 小時參與。", "mid": "老闆有意願，但時間與人力還沒有確定。建議把「誰負責、每週幾小時、三個月要看到什麼」寫成一頁目標單。", "high": "老闆投入是最重要的條件，貴公司已經具備。接下來重點是讓帶頭的員工得到明確授權。"}, "process_data": {"low": "很多工作靠紙本或老員工記憶，AI 很難直接幫上忙。建議先把一個流程的範本與檔案集中、整理好。", "mid": "流程有基本做法，但不一致，或沒有算過花多少時間。建議挑一個流程記下現在的工時，之後才知道改善了多少。", "high": "流程與資料已經相當整齊，適合直接挑 2 到 3 個流程開始改善。"}, "people": {"low": "員工對電腦或新工具還不熟悉，建議先從最簡單的用法開始，並找到一位同事信任的人帶頭。", "mid": "員工願意嘗試，但需要有人帶。培養 1 到 2 位內部帶頭人員，會比請所有人去上課更有效。", "high": "員工能力與意願都不錯，適合直接讓每個人動手做出自己的小工具。"}, "it_basics": {"low": "電腦、帳號或備份還不穩定，建議先請配合的電腦公司或系統商把基本環境整理好，再談 AI。", "mid": "基本環境大致可用，建議統一公司帳號、開啟兩步驟登入，並確認備份能還原。", "high": "IT 基礎穩定，導入 AI 時不太需要額外的大筆設備投資。"}, "security_governance": {"low": "目前沒有規則規範哪些資料能給 AI 用，容易不小心把客戶圖面或報價外流。建議先訂一頁簡單的 AI 使用規則。", "mid": "有基本做法，但還沒寫清楚或沒人負責。建議指定一位負責人，並依部門整理檔案權限。", "high": "資料權限與使用規則已經有基礎，擴大使用時只要定期檢查即可。"}, "current_use": {"low": "公司幾乎還沒開始使用 AI。這很常見，建議從一個具體的文書工作開始，不要一次全面導入。", "mid": "已經有人在用，但多半是個人零散使用。下一步是挑一個流程，讓它變成公司固定的做法。", "high": "已經有實際成果，適合把成功經驗整理起來，推廣到其他部門。"}}, "cta": "想知道貴公司最適合從哪個流程開始嗎？留下聯絡方式，我們會約時間做一次免費 30 分鐘遠端診斷，和你一起看這份結果，給出具體的第一步。"};
+const $ = s => document.querySelector(s);
+const total = DATA.questions.length, maxScore = total * 3;
+$('#title').textContent = DATA.title;
+$('#intro').textContent = DATA.intro;
+const form = $('#quiz');
+let qn = 0;
+DATA.dimensions.forEach((d, di) => {
+  const sec = document.createElement('section'); sec.className = 'dim';
+  sec.innerHTML = `<div class="dim-head"><span class="code">${String.fromCharCode(65+di)}</span><h2></h2></div><p class="dim-desc"></p>`;
+  sec.querySelector('h2').textContent = d.name;
+  sec.querySelector('.dim-desc').textContent = d.description;
+  DATA.questions.filter(q => q.dimension === d.id).forEach(q => {
+    qn++;
+    const div = document.createElement('div'); div.className = 'q';
+    const p = document.createElement('p');
+    p.innerHTML = `<span class="qn">${String(qn).padStart(2,'0')}</span>`;
+    p.append(q.text); div.append(p);
+    const opts = document.createElement('div'); opts.className = 'opts';
+    q.options.forEach((o, oi) => {
+      const lab = document.createElement('label'); lab.className = 'opt';
+      const inp = document.createElement('input');
+      inp.type = 'radio'; inp.name = q.id; inp.value = o.score; inp.id = `${q.id}-${oi}`;
+      const sp = document.createElement('span'); sp.textContent = o.label;
+      lab.append(inp, sp); opts.append(lab);
+    });
+    div.append(opts); sec.append(div);
+  });
+  form.append(sec);
+});
+function answers(){ const a = {}; DATA.questions.forEach(q => { const c = form.querySelector(`input[name="${q.id}"]:checked`); if (c) a[q.id] = +c.value; }); return a; }
+function save(){ try { localStorage.setItem('readiness', JSON.stringify(answers())); } catch(e){} }
+function update(){
+  const n = Object.keys(answers()).length;
+  $('#fill').style.width = (n/total*100) + '%';
+  $('#count').textContent = `${n} / ${total}`;
+  $('#see').disabled = $('#see2').disabled = n < total;
+}
+function level(avg){ return avg < 1 ? 'low' : avg < 2 ? 'mid' : 'high'; }
+const lvColor = {low:'var(--low)', mid:'var(--warn)', high:'var(--ok)'};
+const lvName = {low:'待加強', mid:'有基礎', high:'到位'};
+function show(){
+  const a = answers(); const sum = Object.values(a).reduce((x,y)=>x+y,0);
+  const band = DATA.bands.find(b => sum >= b.min && sum <= b.max);
+  const r = $('#result'); r.innerHTML = '';
+  const head = document.createElement('div');
+  head.innerHTML = `<div class="eyebrow">自評結果</div><div class="score"><span class="num">${sum}</span><span class="of">/ ${maxScore} 分</span></div><h2 class="band"></h2><p class="summary"></p>`;
+  head.querySelector('.band').textContent = band.name;
+  head.querySelector('.summary').textContent = band.summary;
+  r.append(head);
+  const rows = document.createElement('div'); rows.className = 'rows';
+  DATA.dimensions.forEach(d => {
+    const qs = DATA.questions.filter(q => q.dimension === d.id);
+    const s = qs.reduce((x,q)=>x+(a[q.id]||0),0), m = qs.length*3, lv = level(s/qs.length);
+    const row = document.createElement('div'); row.className = 'row';
+    row.innerHTML = `<span class="name"></span><div class="meter"><i style="width:${s/m*100}%;background:${lvColor[lv]}"></i></div><span class="val">${s} / ${m}</span><p class="fb"></p>`;
+    row.querySelector('.name').textContent = d.name;
+    const fb = row.querySelector('.fb');
+    const tag = document.createElement('span'); tag.className='tag'; tag.style.color = lvColor[lv]; tag.textContent = lvName[lv];
+    fb.append(DATA.dimension_feedback[d.id][lv], tag);
+    rows.append(row);
+  });
+  r.append(rows);
+  const h3 = document.createElement('h3'); h3.textContent = '建議的下一步'; r.append(h3);
+  const ol = document.createElement('ol'); ol.className = 'steps';
+  band.next_steps.forEach(s => { const li = document.createElement('li'); li.textContent = s; ol.append(li); });
+  r.append(ol);
+  const cta = document.createElement('div'); cta.className = 'cta'; cta.textContent = DATA.cta + ' '; const link = document.createElement('a'); link.href = 'https://docs.google.com/forms/d/e/1FAIpQLSeiIEt4LeP-rIitegCDqyVF-HGJbCDBkQgci7QhBOAWPyaF8w/viewform'; link.target = '_blank'; link.rel = 'noopener'; link.textContent = '預約免費診斷'; link.style.fontWeight = '700'; cta.append(link); r.append(cta);
+  const note = document.createElement('p'); note.className = 'note'; note.textContent = '自評答案只存在你自己的瀏覽器裡，不會傳送給任何人；只有你在預約表單主動填寫的聯絡資料會送給我們。'; r.append(note);
+  r.hidden = false; r.scrollIntoView({behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'});
+}
+form.addEventListener('change', () => { update(); save(); });
+$('#see').onclick = $('#see2').onclick = show;
+$('#reset').onclick = () => { form.reset(); $('#result').hidden = true; update(); save(); };
+$('#sample').onclick = () => {
+  const sample = [3,2,2,2, 1,1,2,1, 2,2,2,0, 2,2,2, 1,0,1, 1,1,0];
+  DATA.questions.forEach((q,i) => { const el = form.querySelector(`input[name="${q.id}"][value="${sample[i]}"]`); if (el) el.checked = true; });
+  update(); save(); show();
+};
+try { const s = JSON.parse(localStorage.getItem('readiness') || '{}');
+  Object.entries(s).forEach(([k,v]) => { const el = form.querySelector(`input[name="${k}"][value="${v}"]`); if (el) el.checked = true; }); } catch(e){}
+update();
+</script>
+</body>
+</html>
